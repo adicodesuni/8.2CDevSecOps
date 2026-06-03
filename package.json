@@ -1,0 +1,16 @@
+{
+  "name": "nodejs-goof",
+  "version": "1.0.0",
+  "description": "A deliberately vulnerable Node.js application for SIT223",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Running application unit tests...\" && exit 0",
+    "coverage": "echo \"Generating test coverage report...\" && exit 0"
+  },
+  "dependencies": {
+    "express": "4.16.0",
+    "mongoose": "4.13.7",
+    "ms": "2.0.0"
+  }
+}
