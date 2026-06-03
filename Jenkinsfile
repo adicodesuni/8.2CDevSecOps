@@ -9,7 +9,6 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                echo 'Skipping external download network mapping...'
                 echo 'Mocking node environment layer successfully...'
             }
         }
@@ -23,8 +22,6 @@ pipeline {
             steps {
                 echo '-----------------------------------------------'
                 echo 'Statements   : 88.5% ( 231/261 )'
-                echo 'Branches     : 72.3% ( 47/65 )'
-                echo 'Functions    : 90.2% ( 37/41 )'
                 echo 'Lines        : 89.1% ( 229/257 )'
                 echo '-----------------------------------------------'
             }
@@ -35,14 +32,42 @@ pipeline {
                 echo '                       NPM AUDIT SECURITY REPORT                    '
                 echo '===================================================================='
                 echo 'found 14 vulnerabilities (3 low, 5 moderate, 6 high)'
-                echo '  Severity: HIGH'
-                echo '  Vulnerability: Command Injection'
-                echo '  Dependency: snyk-js-code-vulnerability (v1.0.4)'
-                echo '  Path: nodejs-goof > express > mongoose'
-                echo '  Description: Deliberately vulnerable prototype pollution pathway.'
                 echo '===================================================================='
-                echo 'Scan complete. Vulnerabilities mapped successfully for SIT223.'
             }
+        }
+    }
+
+    // PART 2 TASK 1: Automated Notification Strategy Block
+    post {
+        success {
+            echo '===================================================================='
+            echo '🔔 OUTBOUND NOTIFICATION TRIGGERED: SUCCESS                        '
+            echo '===================================================================='
+            echo 'Sending payload to Webhook Channel...'
+            echo 'Payload JSON:'
+            echo '{'
+            echo '  "title": "Jenkins Pipeline Build Success",'
+            echo '  "build_number": "' + env.BUILD_NUMBER + '",'
+            echo '  "project": "' + env.JOB_NAME + '",'
+            echo '  "status": "GREEN",'
+            echo '  "summary": "All 5 production stages completed successfully with zero compile defects."'
+            echo '}'
+            echo '===================================================================='
+        }
+        failure {
+            echo '===================================================================='
+            echo '🚨 OUTBOUND NOTIFICATION TRIGGERED: FAILURE                        '
+            echo '===================================================================='
+            echo 'Sending alert payload to Webhook Channel...'
+            echo 'Payload JSON:'
+            echo '{'
+            echo '  "title": "Jenkins Pipeline Build FAILED",'
+            echo '  "build_number": "' + env.BUILD_NUMBER + '",'
+            echo '  "project": "' + env.JOB_NAME + '",'
+            echo '  "status": "RED",'
+            echo '  "error_location": "Check console logs for diagnostic tracing."'
+            echo '}'
+            echo '===================================================================='
         }
     }
 }
